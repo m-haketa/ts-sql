@@ -273,10 +273,12 @@ type ReadRowField<Row, Field, Aliases> = Field extends MemberExpression<
   infer O,
   infer P
 >
-  ? ReadRowField<GetValueByKey<Row, O, Aliases>, Identifier<P>, Aliases>
+  ? GetValueByKey<Row, O, Aliases> extends Iterable<infer I>
+    ? ReadRowField<I, Identifier<P>, Aliases>
+    : ReadRowField<GetValueByKey<Row, O, Aliases>, Identifier<P>, Aliases>
   : Field extends Identifier<infer P>
-  ? GetValueByKey<Row, P, Aliases>
-  : never;
+    ? GetValueByKey<Row, P, Aliases>
+    : never;
 
 type AssembleRows<Fields, Data> = Fields extends FieldSpecifier<any>[]
   ? { [Index in keyof Data]: AssembleRow<Fields, Data[Index]> }
