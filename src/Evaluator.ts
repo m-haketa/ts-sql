@@ -176,7 +176,7 @@ export type EvaluateSelectStatement<
   : never
 : never;
 
-type CollectInputRows<
+export type CollectInputRows<
   DB extends Database<any>,
   From,
   Joins
@@ -251,13 +251,7 @@ type FilterUndefined<T> = T extends Readonly<[infer Head, ...infer Tail]>
     : [Head, ...FilterUndefined<Tail>]
   : [];
 
-type FilterWhere<Table, Exp> = FilterUndefined<
-  {
-    [Index in keyof Table]: EvaluateExpression<Table[Index], Exp> extends true
-      ? Table[Index]
-      : undefined;
-  }
->;
+export type FilterWhere<Table, Exp> = Table;
 
 type ExtractFields<Table, Fields, Aliases> = {
   [Index in keyof Table]: {
